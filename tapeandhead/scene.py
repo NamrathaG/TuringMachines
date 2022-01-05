@@ -7,8 +7,12 @@ TODO
 
 """
 
-tape = Table([["a", "a", "b", "a"]], include_outer_lines=True)
-headObj = Head(tape)
+
+tapeList = ["b","b","1","1","1","b","b","b","b"]
+tape = Table([tapeList], include_outer_lines=True)
+tape.get_vertical_lines()[0].set_color(BLACK)
+tape.get_vertical_lines()[1].set_color(BLACK)
+headObj = Head(tape, position=(1,3))
 
 class TapeAndHead(Scene):
 
@@ -29,17 +33,83 @@ class TapeAndHead(Scene):
         arrow = head.arrow
         self.play(arrow.animate.next_to(cell,UP))
 
-    def 
+    def write_to_tape(self, alpha):
+        global tape
+        global tapeList
+        curr_head_pos = headObj.location
+        print(curr_head_pos)
+        tapeList[curr_head_pos[1]-1] = alpha
+        print(tapeList)
+        tape2 = Table([tapeList], include_outer_lines=True)
+        tape2.get_vertical_lines()[0].set_color(BLACK)
+        tape2.get_vertical_lines()[1].set_color(BLACK)
+        self.play(Transform(tape,tape2))
+        self.remove(tape)
+        self.add(tape2)
+        tape = tape2
+
+    # def tell_me_what_to_do(self, program, state, curr_alpha):
+    #     return program["delta"][state][curr_alpha]
 
     def construct(self):
-        
-        
+
+
         self.add(tape,headObj.get_head().arrow)
-       
-        self.move_right()
-        self.move_left()
-        self.move_right()
-        self.wait(1)
+        program = {
+            "initial" :"q0",
+            "final" : ["q3"],
+            "delta" : {"q0":
+                      {
+                      "1":["q0", "x", "R" ], 
+                      "b": ["q1", "b", "L"]
+                      },
+                    "q1":
+                     {
+                       "1":["q1", "1", "L"],
+                       "x":["q2", "1", "R"],
+                       "b":["q3", "b", "R"]
+                     },  
+                     "q2":
+                     {
+                         "1":["q2", "1", "R"],
+                         "b":["q1", "1", "L"]
+                     }
+                   }
+                }
+
+        control_state = program["initial"]
+        while(control_state not in program["final"]):
+            loc = headObj.location
+            ent = str(tape.get_entries(loc).lines_text.original_text)
+            
+            # try:
+            #     l = program["delta"][control_state][ent]
+            # except Exception:
+            #     break
+            l = program["delta"][control_state][ent]
+            control_state = l[0]
+            self.write_to_tape(l[1])
+            if (l[2] == "L"):
+                self.move_left()
+            else:
+                self.move_right()
+          
+          
+            
+
+
+        # loc = headObj.location
+        # cell = tape.get_cell(loc)
+        # pprint
+        # print()
+        # self.move_right()
+        # self.move_left()
+        # self.write_to_tape("k")
+        # self.move_right()
+        # self.write_to_tape("x")
+        # self.move_right()
+        # self.write_to_tape("y")
+        # self.wait(1)
         
 
         # head = headObj.get_head()

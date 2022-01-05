@@ -16,11 +16,18 @@ class TableExplore(Scene):
         tape_list = ["x", "y", "y", "z"]
         tape = Table([tape_list], include_outer_lines=True)
         self.add(tape)
-        tape_list2 = ["x", "x", "y", "z"]
-        tape2 = Table([tape_list2], include_outer_lines=True)
+        # tape_list2 = ["x", "x", "y", "z"]
+        # tape2 = Table([tape_list2], include_outer_lines=True)
+        cell = tape.get_cell((1,1))
+        ent = tape.get_entries((1,1)).lines_text.original_text
+        # arrow = Arrow(start=UP, end=DOWN, color=GOLD)
+        # self.play(tape.animate.set_value([["a","b","c","d"]]))
+        pprint(vars(ent))
+        # self.play(arrow.animate.next_to(tape.get_cell((1,3)),UP))
 
-        self.play(Transform(tape, tape2))
-        self.wait(1)
+
+        # self.play(Transform(tape, tape2))
+        # self.wait(1)
         # self.add(tape)
         # cell = tape.get_cell((1,2))
         # cell.set_color(BLUE)
