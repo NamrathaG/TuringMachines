@@ -4,7 +4,7 @@ class Head:
   def __init__(self, table, position=(1,1)):
      self.location = position
      self.table = table
-     self.arrow = Arrow(start=UP, end=DOWN, color=GOLD)
+     self.arrow = Arrow(start=UP, end=DOWN, color=GOLD).scale(0.5)
      self.arrow.next_to(table.get_cell(position), UP)
 
   def get_head(self):
